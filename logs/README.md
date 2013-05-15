@@ -15,7 +15,7 @@ The class `android.util.Log` has a lot of drawbacks:
 How to use it
 -------------
 
- * Add the file "_log.properties_" in "_assets_" folder.
+ * Add the file _"log.properties"_ in _"assets"_ folder.
  * In the `Application` class, inside `onCreate()` method, initialize the `Log` class:
 
         Log.init(this, new LogConfig() {
