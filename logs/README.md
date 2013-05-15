@@ -1,10 +1,10 @@
 The class `android.util.Log` has a lot of drawbacks:
  * For each log, you have to pass a `tag` parameter which is generally defined this way: `private static final String TAG = "MyActivity";` (as [recommended by Google](http://developer.android.com/reference/android/util/Log.html)).
  * To disable logs or at least some levels, you have to specify it in ProGuard file (or add `if` tests around your logs...).
- * The second parameter of a log method must be a String`.
+ * The second parameter of a log method must be a `String`.
  * ...
 
-**With this `Log extension class:**
+**With this `Log` extension class:**
  * You don't have to give a `tag` parameter. This parameter will automatically be set using reflection (you can cutomize the tag).
  * You can log any object, the `toString()` method of this object will be called.
  * You can disable all logs or just the ones coming from some classes or some packages
@@ -15,25 +15,25 @@ The class `android.util.Log` has a lot of drawbacks:
 How to use it
 -------------
 
- * Add the file _log.properties_ in _assets_ folder.
+ * Add the file "_log.properties_" in "_assets_" folder.
  * In the `Application` class, inside `onCreate()` method, initialize the `Log` class:
 
-    Log.init(this, new LogConfig() {
-        @Override
-        public HashSet<String> getPackagesToMute() {
-            return null;
-        }
-        
-        @Override
-        public byte getLogLevel() {
-            return Log.ALL;
-        }
-        
-        @Override
-        public HashSet<Class<?>> getClassesToMute() {
-            return null;
-        }
-    });
+        Log.init(this, new LogConfig() {
+            @Override
+            public HashSet<String> getPackagesToMute() {
+                return null;
+            }
+            
+            @Override
+            public byte getLogLevel() {
+                return Log.ALL;
+            }
+            
+            @Override
+            public HashSet<Class<?>> getClassesToMute() {
+                return null;
+            }
+        });
 
 
 Customization
