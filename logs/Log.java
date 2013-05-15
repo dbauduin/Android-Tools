@@ -8,9 +8,9 @@ import android.content.Context;
  */
 public class Log {
 
-    ///////////////////////
+	///////////////////////
 	//     Variables     //
-    ///////////////////////
+	///////////////////////
 	
 	public final static byte NONE = 0;
 	public final static byte ERROR = 1;
@@ -44,17 +44,17 @@ public class Log {
 	private final static String prefixKey = "logPrefix";
 	private final static String logClassSimpleNameKey = "logClassSimpleName";
 	
-    ///////////////////////
+	///////////////////////
 	//    Constructors   //
-    ///////////////////////
+	///////////////////////
 	
 	protected Log() {
 		
 	}
 	
-    ///////////////////////
+	///////////////////////
 	//      Methods      //
-    ///////////////////////
+	///////////////////////
 	
 	public static void init(Context context, LogConfig logConfig) {
 		if (context != null) {
@@ -302,9 +302,9 @@ public class Log {
 		return canLog;
 	}
 	
-    ///////////////////////
+	///////////////////////
 	// Getters / Setters //
-    ///////////////////////
+	///////////////////////
 	
 	protected static String getTag() {
 		StackTraceElement[] stackStrace = Thread.currentThread().getStackTrace();

@@ -4,7 +4,7 @@ The class `android.util.Log` has a lot of drawbacks:
  * The second parameter of a log method must be a `String`.
  * ...
 
-**With this `Log` extension class:**
+**With this Log extension class:**
  * You don't have to give a `tag` parameter. This parameter will automatically be set using reflection (you can cutomize the tag).
  * You can log any object, the `toString()` method of this object will be called.
  * You can disable all logs or just the ones coming from some classes or some packages
@@ -39,7 +39,7 @@ How to use it
 Customization
 -------------
 
-It is possible to configure the logger thanks to the configuration file _log.properties_:
+It is possible to configure the logger thanks to the configuration file _"log.properties"_:
 
     showLogs = [true|false]
     logPrefix = <your_prefix>
