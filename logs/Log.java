@@ -307,8 +307,8 @@ public class Log {
 			int pointIndex = subPackage.lastIndexOf('.');
 			while (canLog && pointIndex != -1) {
 				subPackage = subPackage.substring(0, pointIndex);
-				canLog = mutedPackages.contains(subPackage);
-				pointIndex = tag.lastIndexOf('.');
+				canLog = !mutedPackages.contains(subPackage);
+				pointIndex = subPackage.lastIndexOf('.');
 			}
 		}
 		return canLog;
