@@ -1,4 +1,7 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Properties;
 
 import android.content.Context;
@@ -27,6 +30,7 @@ public class Log {
 	protected static boolean showLogs = false;
 	protected static String prefix = "";
 	protected static boolean logClassSimpleName = false;
+	protected static String dateFormatPattern = "MM/dd-kk:mm:ss";
 	
 	protected static boolean showVerbose = true;
 	protected static boolean showDebug = true;
@@ -34,6 +38,7 @@ public class Log {
 	protected static boolean showWarning = true;
 	protected static boolean showError = true;
 
+	protected static SimpleDateFormat dateFormat = null;
 	protected static HashSet<String> mutedClasses;
 	protected static HashSet<String> mutedPackages;
 	
@@ -43,6 +48,7 @@ public class Log {
 	private final static String logKey = "showLogs";
 	private final static String prefixKey = "logPrefix";
 	private final static String logClassSimpleNameKey = "logClassSimpleName";
+	private final static String dateFormatKey = "dateFormat";
 	
 	///////////////////////
 	//    Constructors   //
@@ -73,12 +79,18 @@ public class Log {
 				if (logClassSimpleNameValue != null) {
 					logClassSimpleName = Boolean.valueOf(logClassSimpleNameValue);
 				}
+				String _dateFormatPattern = p.getProperty(dateFormatKey);
+				if (_dateFormatPattern != null) {
+					dateFormatPattern = _dateFormatPattern;
+				}
 			} catch (Exception e) {
 				showLogs = false;
 				logClassSimpleName = false;
 			}
 		}
 		if (logConfig != null) {
+			dateFormat = new SimpleDateFormat(dateFormatPattern, Locale.getDefault());
+			
 			byte levels = logConfig.getLogLevel();
 			showVerbose = ((levels & VERBOSE) > 0);
 			showDebug = ((levels & DEBUG) > 0);
@@ -105,9 +117,9 @@ public class Log {
 	 */
 	public static void v(Object message) {
 		if (showLogs && showVerbose) {
-			String tag = getTag();
-			if (canLog(tag)) {
-				android.util.Log.v(tag, getMessage(message));
+			String[] tagAndClassName = getTagAndClassName();
+			if (canLog(getClassName(tagAndClassName))) {
+				android.util.Log.v(getTag(tagAndClassName), getMessage(message));
 			}
 		}
 	}
@@ -119,9 +131,9 @@ public class Log {
 	 */
 	public static void v(Object message, Throwable t) {
 		if (showLogs && showVerbose) {
-			String tag = getTag();
-			if (canLog(tag)) {
-				android.util.Log.v(tag, getMessage(message), t);
+			String[] tagAndClassName = getTagAndClassName();
+			if (canLog(getClassName(tagAndClassName))) {
+				android.util.Log.v(getTag(tagAndClassName), getMessage(message), t);
 			}
 		}
 	}
@@ -133,9 +145,9 @@ public class Log {
 	 */
 	public static void d(Object message) {
 		if (showLogs && showDebug) {
-			String tag = getTag();
-			if (canLog(tag)) {
-				android.util.Log.d(tag, getMessage(message));
+			String[] tagAndClassName = getTagAndClassName();
+			if (canLog(getClassName(tagAndClassName))) {
+				android.util.Log.d(getTag(tagAndClassName), getMessage(message));
 			}
 		}
 	}
@@ -147,9 +159,9 @@ public class Log {
 	 */
 	public static void d(Object message, Throwable t) {
 		if (showLogs && showDebug) {
-			String tag = getTag();
-			if (canLog(tag)) {
-				android.util.Log.d(tag, getMessage(message), t);
+			String[] tagAndClassName = getTagAndClassName();
+			if (canLog(getClassName(tagAndClassName))) {
+				android.util.Log.d(getTag(tagAndClassName), getMessage(message), t);
 			}
 		}
 	}
@@ -161,9 +173,9 @@ public class Log {
 	 */
 	public static void i(Object message) {
 		if (showLogs && showInfo) {
-			String tag = getTag();
-			if (canLog(tag)) {
-				android.util.Log.i(tag, getMessage(message));
+			String[] tagAndClassName = getTagAndClassName();
+			if (canLog(getClassName(tagAndClassName))) {
+				android.util.Log.i(getTag(tagAndClassName), getMessage(message));
 			}
 		}
 	}
@@ -175,9 +187,9 @@ public class Log {
 	 */
 	public static void i(Object message, Throwable t) {
 		if (showLogs && showInfo) {
-			String tag = getTag();
-			if (canLog(tag)) {
-				android.util.Log.i(tag, getMessage(message), t);
+			String[] tagAndClassName = getTagAndClassName();
+			if (canLog(getClassName(tagAndClassName))) {
+				android.util.Log.i(getTag(tagAndClassName), getMessage(message), t);
 			}
 		}
 	}
@@ -189,9 +201,9 @@ public class Log {
 	 */
 	public static void w(Object message) {
 		if (showLogs && showWarning) {
-			String tag = getTag();
-			if (canLog(tag)) {
-				android.util.Log.w(tag, getMessage(message));
+			String[] tagAndClassName = getTagAndClassName();
+			if (canLog(getClassName(tagAndClassName))) {
+				android.util.Log.w(getTag(tagAndClassName), getMessage(message));
 			}
 		}
 	}
@@ -203,9 +215,9 @@ public class Log {
 	 */
 	public static void w(Object message, Throwable t) {
 		if (showLogs && showWarning) {
-			String tag = getTag();
-			if (canLog(tag)) {
-				android.util.Log.w(tag, getMessage(message), t);
+			String[] tagAndClassName = getTagAndClassName();
+			if (canLog(getClassName(tagAndClassName))) {
+				android.util.Log.w(getTag(tagAndClassName), getMessage(message), t);
 			}
 		}
 	}
@@ -217,9 +229,9 @@ public class Log {
 	 */
 	public static void e(Object message) {
 		if (showLogs && showError) {
-			String tag = getTag();
-			if (canLog(tag)) {
-				android.util.Log.e(tag, getMessage(message));
+			String[] tagAndClassName = getTagAndClassName();
+			if (canLog(getClassName(tagAndClassName))) {
+				android.util.Log.e(getTag(tagAndClassName), getMessage(message));
 			}
 		}
 	}
@@ -231,9 +243,9 @@ public class Log {
 	 */
 	public static void e(Object message, Throwable t) {
 		if (showLogs && showError) {
-			String tag = getTag();
-			if (canLog(tag)) {
-				android.util.Log.e(tag, getMessage(message), t);
+			String[] tagAndClassName = getTagAndClassName();
+			if (canLog(getClassName(tagAndClassName))) {
+				android.util.Log.e(getTag(tagAndClassName), getMessage(message), t);
 			}
 		}
 	}
@@ -306,19 +318,36 @@ public class Log {
 	// Getters / Setters //
 	///////////////////////
 	
-	protected static String getTag() {
+	protected static String[] getTagAndClassName() {
+		String tag = null;
 		StackTraceElement[] stackStrace = Thread.currentThread().getStackTrace();
 		StackTraceElement element = stackStrace[4];
-		String classname = element.getClassName();
+		String fullClassName = element.getClassName();
+		String className = fullClassName;
 		if (logClassSimpleName) {
 			try {
-				classname = Class.forName(classname).getSimpleName();
+				className = Class.forName(fullClassName).getSimpleName();
 			} catch (Exception e) { }
 		}
 		if (prefix != null && prefix.length() > 0) {
-			return prefix + classname;
+			tag = prefix + className;
+		} else {
+			tag = className;
 		}
-		return classname;
+		if (dateFormatPattern != null && dateFormatPattern.length() > 0) {
+			tag += " (" + dateFormat.format(new Date()) + ")";
+		}
+		
+		String[] tagAndClassName = {tag, fullClassName}; 
+		return tagAndClassName;
+	}
+	
+	protected static String getTag(String[] tagAndClassName) {
+		return tagAndClassName[0];
+	}
+	
+	protected static String getClassName(String[] tagAndClassName) {
+		return tagAndClassName[1];
 	}
 	
 	protected static String getMessage(Object message) {
