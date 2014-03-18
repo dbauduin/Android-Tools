@@ -3,7 +3,7 @@
  */
 public interface AppStateListener {
 	
-	void onApplicationDidEnterForeground(boolean awakeFromBackground, int lauchNumber);
+	void onApplicationDidEnterForeground(boolean awakeFromBackground, int launchNumber);
 	void onApplicationDidEnterBackground();
 	
 }

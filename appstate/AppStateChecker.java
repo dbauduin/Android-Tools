@@ -21,7 +21,7 @@ abstract class AppStateChecker implements Runnable {
 		} else {
 			// Don't have access to task list. Use an appStateChecker which provides good results in almost all cases.
 			// (If you have a not full screen activity above another one and you rotate your device, if you put your application in background, this appStateChecker probably won't detect it.)
-			instance = new PermissionFreeAppStateChecker();
+			instance = new PermissionFreeAppStateChecker(context);
 		}
 		return instance;
 	}

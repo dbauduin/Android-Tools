@@ -73,19 +73,14 @@ public class AppStateAnalyzer implements AppStateCheckerListener {
 		saveIntForKey(launchNumber, SHARED_PREFERENCES_LAUNCH_NUMBER_KEY);
 		
 		// Call listeners
-		HashSet<AppStateListener> deadListeners = null;
-		for (AppStateListener listener : this.listeners) {
+		@SuppressWarnings("unchecked")
+		HashSet<AppStateListener> listenersCopy = (HashSet<AppStateListener>) this.listeners.clone();
+		for (AppStateListener listener : listenersCopy) {
 			try {
 				listener.onApplicationDidEnterForeground(awakeFromBackground, launchNumber);
 			} catch (Exception e) {
-				if (deadListeners == null) {
-					deadListeners = new HashSet<AppStateListener>();
-				}
-				deadListeners.add(listener);
+				this.listeners.remove(listener);
 			}
-		}
-		if (deadListeners != null) {
-			this.listeners.removeAll(deadListeners);
 		}
 	}
 
@@ -127,17 +122,19 @@ public class AppStateAnalyzer implements AppStateCheckerListener {
 	
 	private void internalOnStartActivity(Activity activity) {
 		this.handler.removeCallbacks(this.appStateChecker);
+
+		this.appStateChecker.onStartActivity(activity);
+		
 		this.handler.postDelayed(this.appStateChecker, CHECK_APP_STATE_DELAY);
 		
 		this.contextIdentifier = activity.getApplicationContext().hashCode();
-		
-		this.appStateChecker.onStartActivity(activity);
 	}
 	
 	private void internalOnStopActivity(Activity activity) {
+		this.handler.removeCallbacks(this.appStateChecker);
+		
 		this.appStateChecker.onStopActivity(activity);
 		
-		this.handler.removeCallbacks(this.appStateChecker);
 		this.handler.postDelayed(this.appStateChecker, CHECK_APP_STATE_DELAY);
 	}
 	
